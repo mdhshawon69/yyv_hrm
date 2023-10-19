@@ -2,48 +2,29 @@ import {
   View,
   Text,
   SafeAreaView,
-  TextInput,
   StyleSheet,
-  Pressable,
-  Switch,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
-import DateTimePickerAndroid from "@react-native-community/datetimepicker";
-import RNPickerSelect from "react-native-picker-select";
 import moment from "moment";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import {
+  Select,
+  FormControl,
+  Input,
+  WarningOutlineIcon,
+  Button,
+} from "native-base";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function LeaveRequest() {
-  const [date, setDate] = useState(new Date());
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const router = useRouter();
-  //Router
+  const [service, setService] = useState();
+  const [showStartDate, setShowStartDate] = useState(false);
+  const [showEndDate, setShowEndDate] = useState(false);
 
-  const onStartDateSet = (e) => {
-    if (e) {
-      setStartDate(moment(e.nativeEvent.timestamp).format("YYYY-MM-DD"));
-      setShowStartDatePicker(false);
-    } else {
-      setShowStartDatePicker(false);
-    }
-  };
-
-  const onEndDateSet = (e) => {
-    if (e) {
-      setEndDate(moment(e.nativeEvent.timestamp).format("YYYY-MM-DD"));
-      setShowEndDatePicker(false);
-    } else {
-      setShowEndDatePicker(false);
-    }
-  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen
@@ -72,122 +53,87 @@ export default function LeaveRequest() {
 
       <ScrollView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <View>
-            <Text style={styles.label}>Leave Type:</Text>
-            <View
-              style={{
-                backgroundColor: "#ccc",
-                borderRadius: 6,
-                marginBottom: 15,
+          <FormControl isRequired isInvalid w="full">
+            <FormControl.Label>Reason</FormControl.Label>
+            <Input placeholder="Enter Reason" />
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}>
+              Try different from previous passwords.
+            </FormControl.ErrorMessage>
+          </FormControl>
+          <FormControl w="full" isRequired isInvalid>
+            <FormControl.Label>Choose Leave Type</FormControl.Label>
+            <Select
+              minWidth="200"
+              accessibilityLabel="Choose Service"
+              placeholder="Choose Service"
+              _selectedItem={{
+                bg: "teal.600",
               }}
-            >
-              <RNPickerSelect
-                onValueChange={(value) => console.log(value)}
-                items={[
-                  { label: "Sick Leave", value: "2" },
-                  { label: "Casual Leave", value: "3" },
-                  { label: "Annual Leave", value: "4" },
-                  { label: "Maternity Leave", value: "5" },
-                  { label: "Bereavement Leave", value: "6" },
-                  { label: "Marriage Leave", value: "7" },
-                  { label: "Leave Without Pay", value: "8" },
-                ]}
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Reason:</Text>
-            <TextInput
-              cursorColor={"#C82159"}
-              style={styles.input}
-              placeholder="Enter Your Reason"
+              mt="1">
+              <Select.Item label="UX Research" value="ux" />
+              <Select.Item label="Web Development" value="web" />
+              <Select.Item label="Cross Platform Development" value="cross" />
+              <Select.Item label="UI Designing" value="ui" />
+              <Select.Item label="Backend Development" value="backend" />
+            </Select>
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}>
+              Please make a selection!
+            </FormControl.ErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid w="full">
+            <FormControl.Label>Leave Starts From</FormControl.Label>
+            <Input
+              placeholder="Enter Date"
+              onPressIn={() => setShowStartDate(true)}
             />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Leave Starts From:</Text>
-            <Pressable onPress={() => setShowStartDatePicker(true)}>
-              <TextInput
-                cursorColor={"#ccc"}
-                style={styles.input}
-                editable={false}
-                value={startDate}
-                placeholder="Select Start Date"
-              />
-            </Pressable>
-            {showStartDatePicker && (
-              <DateTimePickerAndroid
-                onChange={onStartDateSet}
-                mode="date"
-                value={date}
-              />
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Leave Ends:</Text>
-            <Pressable onPress={() => setShowEndDatePicker(true)}>
-              <TextInput
-                cursorColor={"#ccc"}
-                style={styles.input}
-                editable={false}
-                value={endDate}
-                placeholder="Select End Date"
-              />
-            </Pressable>
-            {showEndDatePicker && (
-              <DateTimePickerAndroid
-                onChange={onEndDateSet}
-                mode="date"
-                value={date}
-              />
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+            {showStartDate && <RNDateTimePicker value={new Date()} />}
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}>
+              Try different from previous passwords.
+            </FormControl.ErrorMessage>
+          </FormControl>
+          <FormControl isRequired isInvalid w="full">
+            <FormControl.Label>Leave End Day</FormControl.Label>
+            <Input
+              placeholder="Enter Date"
+              onPressIn={() => setShowEndDate(true)}
+            />
+            {showEndDate && <RNDateTimePicker value={new Date()} />}
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}>
+              Try different from previous passwords.
+            </FormControl.ErrorMessage>
+          </FormControl>
+          <FormControl w="full" isInvalid>
+            <FormControl.Label>Choose Partial Hours (If any)</FormControl.Label>
+            <Select
+              minWidth="200"
+              accessibilityLabel="Choose Service"
+              placeholder="Choose Service"
+              _selectedItem={{
+                bg: "teal.600",
               }}
-            >
-              <Text style={{ fontSize: 14, fontWeight: "bold" }}>
-                Leave Day Partials:
-              </Text>
-              <Switch
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={isEnabled ? "#C82159" : "#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={isEnabled}
-              />
-            </View>
-          </View>
-
-          {isEnabled && (
-            <View style={{ backgroundColor: "#ccc", borderRadius: 6 }}>
-              <RNPickerSelect
-                onValueChange={(value) => console.log(value)}
-                items={[
-                  { label: "1", value: "1" },
-                  { label: "2", value: "2" },
-                  { label: "3", value: "3" },
-                  { label: "4", value: "4" },
-                  { label: "5", value: "5" },
-                  { label: "6", value: "6" },
-                  { label: "7", value: "7" },
-                ]}
-              />
-            </View>
-          )}
-
+              mt="1">
+              <Select.Item label="UX Research" value="ux" />
+              <Select.Item label="Web Development" value="web" />
+              <Select.Item label="Cross Platform Development" value="cross" />
+              <Select.Item label="UI Designing" value="ui" />
+              <Select.Item label="Backend Development" value="backend" />
+            </Select>
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="xs" />}>
+              Please make a selection!
+            </FormControl.ErrorMessage>
+          </FormControl>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.apply}>
-              <Text style={styles.btnText}>Apply</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancel}>
-              <Text style={styles.btnText}>Cancel</Text>
-            </TouchableOpacity>
+            <Button flex="1" py="4">
+              Submit
+            </Button>
+            <Button flex="1" py="4" bg="red.500">
+              Cancel
+            </Button>
           </View>
         </View>
       </ScrollView>
@@ -202,7 +148,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontWeight: "500",
     height: 50,
-    backgroundColor: "#ccc",
     borderRadius: 6,
   },
 
@@ -215,6 +160,7 @@ const styles = StyleSheet.create({
 
   container: {
     padding: 15,
+    gap: 10,
   },
 
   buttonContainer: {
@@ -223,6 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 15,
+    gap: 10,
   },
 
   apply: {

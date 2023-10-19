@@ -1,6 +1,7 @@
 {
   "expo": {
     "scheme": "acme",
+    "icon": "./assets/play_store_512.png",
     "web": {
       "bundler": "metro"
     },
@@ -8,6 +9,17 @@
       "expo-router"
     ],
     "name": "yyv_leave_management",
-    "slug": "yyv_leave_management"
+    "slug": "yyv_leave_management",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d9fc1130-b92a-4358-b695-493dc1e0457b"
+      }
+    },
+    "android": {
+      "package": "com.mdhshawon69.yyv_leave_management"
+    }
   }
 }
