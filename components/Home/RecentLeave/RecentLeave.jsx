@@ -22,7 +22,9 @@ export default function RecentLeave() {
             <Text style={styles.date}>15 Sep - 22 Sep 2023</Text>
             <Text style={styles.leaveType}>Sick Leave</Text>
           </View>
-          <Text style={styles.status}>Approved</Text>
+          <View style={styles.status}>
+            <Text style={styles.statusText}>Approved</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -90,6 +92,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 50,
+  },
+
+  statusText: {
     color: "#32de84",
     fontWeight: "bold",
   },

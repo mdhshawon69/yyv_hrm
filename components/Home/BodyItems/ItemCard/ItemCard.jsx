@@ -20,8 +20,7 @@ export default function ItemCard({ data }) {
         elevation: 2,
         borderRadius: 10,
         backgroundColor: "#f7f7f7",
-      }}
-    >
+      }}>
       <View
         style={{
           flex: 1,
@@ -29,19 +28,23 @@ export default function ItemCard({ data }) {
           flexDirection: "column",
           alignItems: "center",
           padding: 10,
-        }}
-      >
-        <MaterialCommunityIcons
+        }}>
+        <View
           style={{
             paddingHorizontal: 15,
             paddingVertical: 15,
             borderRadius: 50,
             backgroundColor: `${data.bg}`,
             color: "#fff",
-          }}
-          name={data.icon}
-          size={40}
-        />
+          }}>
+          <MaterialCommunityIcons
+            style={{
+              color: "#fff",
+            }}
+            name={data.icon}
+            size={40}
+          />
+        </View>
         <Text style={{ fontSize: 14, marginTop: 10, fontWeight: 600 }}>
           {data.title}
         </Text>
